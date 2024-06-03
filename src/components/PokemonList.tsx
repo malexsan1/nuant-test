@@ -9,7 +9,7 @@ export interface PokemonListProps {
 const PER_PAGE = 20;
 
 export const PokemonList: React.FC<PokemonListProps> = ({ pokemons = [] }) => {
-  const { page = 1 } = useSearch({ strict: false });
+  const { page = 1 } = useSearch({ strict: false }) as { page: number };
   const navigate = useNavigate({ from: "/" });
 
   const hasPagination = pokemons.length > PER_PAGE;
@@ -37,8 +37,12 @@ export const PokemonList: React.FC<PokemonListProps> = ({ pokemons = [] }) => {
     });
   };
 
+  if (pokemons.length === 0) {
+    return <span className="self-center mt-12">No pokemons found.</span>;
+  }
+
   return (
-    <div className="flex flex-col gap-2 pt-4">
+    <div className="flex flex-col gap-4">
       {hasPagination && (
         <div className="join self-center">
           <button className="join-item btn" onClick={goToPrevPage}>
@@ -53,7 +57,7 @@ export const PokemonList: React.FC<PokemonListProps> = ({ pokemons = [] }) => {
         </div>
       )}
 
-      <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-4">
         {pokemons
           .slice((page - 1) * PER_PAGE, page * PER_PAGE)
           .map((pokemon) => {

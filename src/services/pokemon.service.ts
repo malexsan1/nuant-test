@@ -1,8 +1,9 @@
-import { PokemonClient } from "pokenode-ts";
+import { Pokemon, PokemonClient } from "pokenode-ts";
 
 export const queryKeys = {
   listPokemons: () => ["list-pokemons"],
   listTypes: () => ["list-types"],
+  pokemon: (pokemonId: string) => ["pokemon", pokemonId],
 };
 
 export class PokemonService {
@@ -35,7 +36,7 @@ export class PokemonService {
       .then((response) => response.results);
   }
 
-  async getPokemonById(id: number) {
+  async getPokemonById(id: number): Promise<Pokemon> {
     return this.client.getPokemonById(id);
   }
 }

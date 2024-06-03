@@ -14,12 +14,12 @@ export const Route = createLazyFileRoute("/")({
 });
 
 function PokemonsHome() {
-  const { data: pokemons = [] } = usePokemons();
+  const { data: pokemons = [], isLoading } = usePokemons();
 
   const navigate = useNavigate();
   const { searchInput = "", type = "" } = useSearch({
     from: "/",
-  });
+  }) as { searchInput: string; type: string };
 
   const onChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     navigate({
@@ -62,8 +62,8 @@ function PokemonsHome() {
   }, [searchInput, pokemons, type]);
 
   return (
-    <div>
-      <div className="flex gap-4 p-4 border-b">
+    <div className="lg:max-w-[60vw] flex flex-col gap-4 mx-auto py-8">
+      <div className="flex gap-4">
         <input
           onChange={onChangeName}
           value={searchInput}
@@ -73,7 +73,11 @@ function PokemonsHome() {
         <PokemonTypeDropdown value={type} onChange={onChangeType} />
       </div>
 
-      <PokemonList pokemons={filteredPokemon} />
+      {isLoading ? (
+        <span className="self-center mt-12">Loading pokemons...</span>
+      ) : (
+        <PokemonList pokemons={filteredPokemon} />
+      )}
     </div>
   );
 }
